@@ -56,26 +56,39 @@
     <audio data-key="76" src="sounds/tink.wav"></audio>
 
     <script>
-      function removeTransition(e) {
-        if (e.propertyName !== "transform") return;
-        e.target.classList.remove("playing");
-      }
+      const playPiano = (event) => {
+        const { keyCode } = event;
 
-      function playSound(e) {
-        const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
-        const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
-        if (!audio) return;
+        const resolveDataKey = (selector, key) =>
+          `${selector}[data-key="${key}"]`;
 
-        key.classList.add("playing");
-        audio.currentTime = 0;
-        audio.play();
-      }
+        const letterElement = document.querySelector(
+          resolveDataKey(".key", keyCode)
+        );
 
-      const keys = Array.from(document.querySelectorAll(".key"));
-      keys.forEach((key) =>
-        key.addEventListener("transitionend", removeTransition)
-      );
-      window.addEventListener("keydown", playSound);
+        const audioElement = document.querySelector(
+          resolveDataKey("audio", keyCode)
+        );
+
+        if (!audioElement && !audioElement) return;
+        audioElement.currentTime = 0;
+        audioElement.play();
+
+        const classes = ["playing", "sound"];
+
+        const stylePlayingLetter = (element, className) => {
+          element.classList.toggle(className);
+
+          setTimeout(() => {
+            element.classList.toggle(className);
+          }, 150);
+        };
+
+        classes.forEach((className) => {
+          stylePlayingLetter(letterElement, className);
+        });
+      };
+      window.addEventListener("keydown", playPiano);
     </script>
   </body>
 </html>
