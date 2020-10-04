@@ -5,12 +5,15 @@
     <title>JS + CSS Clock</title>
   </head>
   <body>
-    <div class="clock">
-      <div class="clock-face">
-        <div class="hand hour-hand"></div>
-        <div class="hand min-hand"></div>
-        <div class="hand second-hand"></div>
+    <div class="container">
+      <div class="clock">
+        <div class="clock-face">
+          <div class="hand hour-hand"></div>
+          <div class="hand min-hand"></div>
+          <div class="hand second-hand"></div>
+        </div>
       </div>
+      <div class="digital-clock">12:01 PM</div>
     </div>
 
     <style>
@@ -29,6 +32,14 @@
         flex: 1;
         min-height: 100vh;
         align-items: center;
+      }
+
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        flex: 1;
       }
 
       .clock {
@@ -64,8 +75,20 @@
         transition-timing-function: cubic-bezier(0, 1.52, 0.58, 1);
       }
 
+      .second-hand {
+        height: 3px;
+      }
+
+      .min-hand {
+        height: 6px;
+      }
+
       .hour-hand {
         background-color: red;
+      }
+
+      .digital-clock {
+        color: wheat;
       }
     </style>
 
@@ -77,6 +100,15 @@
 
       const rotateElement = (element, degrees) =>
         (element.style.transform = `rotate(${degrees}deg)`);
+
+      const digitalTimeFormatElement = ({ seconds, minutes, hours }) => {
+        const isPM = hours >= 12;
+        const isSingleUnitSeconds = seconds < 10;
+        const formattedHours = isPM ? hours - 12 : hours;
+        return `${formattedHours} : ${minutes} : ${
+          isSingleUnitSeconds ? `0${seconds}` : seconds
+        } ${isPM ? "PM" : "AM"}`;
+      };
 
       const getDate = () => {
         const now = new Date();
@@ -97,7 +129,12 @@
         const hoursToSeconds = convertTimeUnitToDegrees(hours, 12);
         rotateElement(hoursElement, hoursToSeconds);
 
-        console.log({ seconds, minutes, hours });
+        const digitalsElement = findElement(".digital-clock");
+        digitalsElement.innerText = digitalTimeFormatElement({
+          seconds,
+          minutes,
+          hours,
+        });
       };
 
       setInterval(getDate, 1000);
