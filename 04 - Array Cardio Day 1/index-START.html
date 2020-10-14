@@ -71,19 +71,46 @@
         "Blake, William",
       ];
 
-      // Array.prototype.filter()
+      console.table(inventors);
+
       // 1. Filter the list of inventors for those who were born in the 1500's
+      const inventorsBornIn1500 = inventors.filter(
+        (inventor) => inventor.year > 1500 && inventor.year < 1600
+      );
 
-      // Array.prototype.map()
+      console.log({ inventorsBornIn1500 });
+
       // 2. Give us an array of the inventors first and last names
+      const inventorNames = inventors.map((user) => ({
+        first: user.first,
+        last: user.last,
+      }));
 
-      // Array.prototype.sort()
+      console.log({ inventorNames });
+
       // 3. Sort the inventors by birthdate, oldest to youngest
+      const sortedInventors = inventors.sort((a, b) => a.year - b.year);
+      console.log({ sortedInventors });
 
-      // Array.prototype.reduce()
+      const getAge = (person) => person.passed - person.year;
+
       // 4. How many years did all the inventors live all together?
+      const reducerCallback = (totalCount, currentItem) => {
+        return totalCount + getAge(currentItem);
+      };
+      const totalInventorYears = inventors.reduce(reducerCallback, 0);
+
+      console.log({ totalInventorYears });
 
       // 5. Sort the inventors by years lived
+      const sortedInventorByAge = inventors.sort((a, b) => {
+        const ageA = getAge(a);
+        const ageB = getAge(b);
+
+        return ageA > ageB ? -1 : 1;
+      });
+
+      console.log({ sortedInventorByAge });
 
       // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
       // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
